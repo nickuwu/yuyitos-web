@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<title>Generar Pedidos</title>
+<div th:replace="/admin/panel :: assets"></div>
+</head>
+<div th:replace="/admin/panel :: mainheader"></div>
+<body>
+	<div class="container">
+		<div class="form-row">
+			<div class="form-group col-md-12" align="center">
+				<h1>Crear Pedido</h1>
+			</div>
+			<!--  <div class="form-group col-md-1">Fecha HOY</div>-->
+		</div>
+		
+		<div>
+			<a href="/pedidos/">< Volver</a>
+			<hr>
+		</div>
+		<form method="POST" action="/pedidos/crear">
+			<div class="form-row">
+				<div class="form-group col-md-4">
+					<label for="inputState">Proveedor</label> <select required
+						name="idProveedor" class="form-control">
+						<option value="">Seleccionar Proveedor</option>
+						<option th:each="proveedor : ${listProveedor}"
+							th:value="${proveedor.idProveedor}" th:text="${proveedor.nombre}">
+						</option>
+					</select>
+				</div>
+
+			</div>
+
+			<div class="form-row">
+				<div class="form-group col-md-4">
+					<label for="inputState">Familia</label> <select
+						class="form-control selectFamilia">
+						<option value="">Seleccionar Familia</option>
+						<option th:each="familia : ${listFamilia}"
+							th:value="${familia.idFamilia}" th:text="${familia.descripcion}">
+						</option>
+					</select>
+				</div>
+				<div class="form-group col-md-4">
+					<label for="inputState">Tipo de producto</label> <select
+						class="form-control selectTipoProducto">
+						<option value="">Seleccione tipo producto</option>
+					</select>
+				</div>
+				<div class="form-group col-md-4">
+					<label for="inputState">Marca</label> <select
+						class="form-control selectMarca">
+						<option value="">Seleccionar Marca</option>
+						<option th:each="marca : ${listMarcas}"
+							th:value="${marca.idMarca}" th:text="${marca.descripcion}">
+						</option>
+					</select>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-md-3">
+					<label for="inputState">Producto</label> <select required
+						class="form-control selectProducto">
+						<option value="">Seleccionar Producto</option>
+					</select>
+				</div>
+				<div class="col-md-1">
+					<button type="button" class="btn btn-success btn-agregar mt-4">Agregar</button>
+				</div>
+			</div>
+			<hr>
+			<div class="form-row">
+				<div class="form-group col-md-9">&nbsp;</div>
+				<div class="form-group col-md-3">
+					<label for="formGroupExampleInput">IVA</label> <input required
+						name="iva" type="text" value="19" readonly class="form-control">
+				</div>
+			</div>
+	
+			<div class="detalles mt-2 mb-2">
+				<div class="col-12 text-center">
+					<strong>No existen productos agregados</strong>
+				</div>
+			</div>
+			<br>
+			<button type="submit" class="btn btn-success btn-enviarPedido" disabled>Generar Pedido</button>
+			<br><br>
+		</form>
+	</div>
+</body>
+</html>

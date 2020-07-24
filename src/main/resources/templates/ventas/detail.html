@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<title>Detalle Ventas</title>
+<div th:replace="/admin/panel :: assets"></div>
+</head>
+<div th:replace="/admin/panel :: mainheader"></div>
+<body>
+	<div class="container">
+
+		<div align="center">
+			<h1>Detalle venta</h1>
+		</div>
+		<div>
+			<a href="/ventas/">< Volver</a>
+			<hr>
+		</div>	
+		<div style="text-align: left">
+				<p>
+					Codigo de venta:
+					<td th:text="${venta.idVenta}"></td>
+				</p>
+
+				<p>
+					Medio Pago:
+					<td th:text="${venta.medioPago.descripcion}"></td>
+				</p>
+				
+				<p>
+					Fecha:
+					<td th:text="${venta.fechaVenta}"></td>
+				</p>
+				
+				<p>
+					Monto Total:
+					<td th:text="${venta.montoTotal}"></td>
+				</p>
+				
+				<p>
+					Vendedor:
+					<td th:text="${venta.usuario.persona.nombre}"></td>
+				</p>
+				
+				<p>
+					Cliente:
+					<td th:if="${venta.persona == null}"> Compra sin cliente asociado</td>
+					<td th:if="${venta.persona != null}">
+					<span th:text="${venta.persona.nombre}"></span>
+					</td>
+				</p>
+		</div>
+			<table border="1" cellpadding="10" class="table">
+				<thead>
+					<tr>
+						<th>ID</th>
+						<th>Producto</th>
+						<th>Cantidad Producto</th>
+						<th>Precio unitario</th>
+						<th>Precio total</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="detalle : ${listDetalleVenta}">
+						<td th:text="${detalle.idDetalleVenta}"></td>
+						<td th:text="${detalle.producto.descripcion}"></td>
+						<td th:text="${detalle.cantidadProducto}"></td>
+						<td th:each="precio : ${detalle.producto.precio}"
+							th:text="${precio.valor}"></td>
+						<td th:each="precio : ${detalle.producto.precio}"
+							th:text="${precio.valor * detalle.cantidadProducto}"></td>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</body>
+</html>

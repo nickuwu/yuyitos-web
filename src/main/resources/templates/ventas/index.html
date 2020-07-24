@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8"/>
+	<title>Ventas</title>
+	<div th:replace="/admin/panel :: assets"> 
+	</div>
+</head>
+<div th:replace="/admin/panel :: mainheader"> 
+</div>
+<body>
+    <div class="container">
+    <div align="center">
+    <h1>Ventas</h1>
+    </div>
+    
+    <div>
+    	<form method="GET" action="/ventas/">
+	    	<div class="row">
+	    		<div class="col-3">
+		    		<input class="form-control" type="date" name="desde" th:value="${desde}"/>
+		    	</div>
+		    	<div class="col-3">
+		    		<input class="form-control" type="date" name="hasta" th:value="${hasta}"/>
+		    	</div>
+		    	<div class="col-2">
+		    		<button type="submmit" class="btn btn-primary">Buscar</button>
+		    	</div>
+		   	</div>
+    	</form>
+    </div>
+    
+    <div th:if="${msgRespuesta == 'OK'}" class="alert alert-success alert-dismissible fade show" role="alert">
+		 ¡Venta realizada con éxito!
+	  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+	    <span aria-hidden="true">&times;</span>
+	  </button>
+	</div>
+	
+    <div align="right" class="mb-3">
+    <a class="btn btn-primary" href="/ventas/nuevo/">Ingresar Venta</a>
+    </div>
+	    <table border="1" cellpadding="10" class="table table-hover">
+	        <thead>
+	            <tr>
+	                <th>ID</th>
+	                <th>Monto compra</th>
+	                <th>Valor pagado</th>
+	                <th>Vuelto</th>
+	                <th>Fecha Venta</th>
+	                <th>Rut Comprador</th>
+	                <th>Vendedor</th>
+	                <th>Medio De Pago</th>
+	                <th>Detalle</th>
+	            </tr>
+	        </thead>
+	        <tbody th:if="${listVentas.size()} == 0">
+	        	<tr>
+	        		<td colspan="9" class="text-center"> No existen registros</td>
+	        	</tr>
+	        </tbody>
+	        <tbody th:if="${listVentas.size()} > 0">
+	            <tr th:each="venta : ${listVentas}">
+	                <td th:text="${venta.idVenta}"></td>
+	                <td th:text="${venta.montoTotal}"></td>
+	                <td th:text="${venta.montoPago}"></td>
+	                <td th:text="${venta.montoVuelto}"></td>
+	                <td th:text="${venta.fechaVenta}"></td>
+	                <td th:if ="${venta.persona == null}"> Compra sin rut asociado</td>	 
+	                <td th:if ="${venta.persona != null}" th:text="${venta.persona.rut}"></td>	               
+	                <td th:text="${venta.usuario.persona.nombre}"></td>
+	                <td th:text="${venta.medioPago.descripcion}"></td>
+	                <td><a th:href="@{${'/ventas/detalle/' + venta.idVenta}}">Ver detalle</a></td>
+	            </tr>
+	        </tbody>
+	    </table>
+    </div>
+</body>
+</html>

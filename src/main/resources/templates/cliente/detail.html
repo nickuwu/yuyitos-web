@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8"/>
+	<title>Ventas</title>
+	<div th:replace="/admin/panel :: assets"> 
+	</div>
+</head>
+<div th:replace="/admin/panel :: mainheader"> 
+</div>
+<body>
+    <div class="container">
+    <div align="center" class="mb-4">
+    <h1>Detalle ventas por cliente</h1>
+    </div>
+    <div>
+			<a href="/clientes/">< Volver</a>
+			<hr>
+		</div>
+    
+    <div th:if="${cliente != null}">
+    	<div>
+    	Rut cliente : <span th:text="${cliente.rut}"></span>
+    	</div>
+    	<div>
+    	Nombre cliente : <span th:text="${cliente.nombre}"></span>
+    	</div>
+    	<div>
+    	Mail cliente : <span th:text="${cliente.mail}"></span>
+    	</div>
+    </div>
+    
+	    <table border="1" cellpadding="10" class="table table-hover">
+	        <thead>
+	            <tr>
+	                <th>ID</th>
+	                <th>Monto compra</th>
+	                <th>Valor pagado</th>
+	                <th>Vuelto</th>
+	                <th>Fecha Venta</th>
+	                <th>Medio De Pago</th>
+	                <th>Estado</th>
+	            </tr>
+	        </thead>
+	        <tbody>
+	            <tr th:each="venta : ${listVentas}">
+	                <td th:text="${venta.idVenta}"></td>
+	                <td th:text="${venta.montoTotal}"></td>
+	                <td th:text="${venta.montoPago}"></td>
+	                <td th:text="${venta.montoVuelto}"></td>
+	                <td th:text="${venta.fechaVenta}"></td>               
+	                <td th:text="${venta.medioPago.descripcion}"></td>
+	                <td th:if="${venta.medioPago.idPago == VAR_ID_DEUDA && venta.montoPago < venta.montoTotal}" >
+	                <a th:href="@{${'/clientes/' + venta.persona.id + '/ventas/' + venta.idVenta+ '/deuda'}}">Abonar</a>
+	                </td>
+	                <td th:if="${venta.medioPago.idPago == VAR_ID_DEUDA && venta.montoPago == venta.montoTotal}" >Pagado</td>
+	                <td th:if="${venta.medioPago.idPago != VAR_ID_DEUDA}" >Pagado</td>
+	                
+	            </tr>
+	        </tbody>
+	    </table>
+    </div>
+</body>
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<title>Generar Ventas</title>
+<div th:replace="/admin/panel :: assets"></div>
+</head>
+<div th:replace="/admin/panel :: mainheader"></div>
+<body>
+	<input type="hidden" id="VAR_ID_DEUDA" th:value="${VAR_ID_DEUDA}">
+	<input type="hidden" id="VAR_ID_EFECTIVO" th:value="${VAR_ID_EFECTIVO}">
+	<div class="container">
+		<div class="form-row">
+			<div class="form-group col-md-12" align="center">
+				<h1>Generar venta</h1>
+			</div>
+		</div>
+		
+		<div>
+			<a href="/ventas/">< Volver</a>
+			<hr>
+		</div>
+		
+		<div class="infoPersona">
+		</div>
+
+		<div class="mt-5">
+			<div class="row">
+				<div class="col-3">
+					<label for="inputState">Ingrese codigo de barras</label> 
+					<input required name="codigoBarra" type="number" class="form-control ingresarCodigo">
+				</div>
+				<div class="col-2 mt-4">
+					<button class="btn btn-success btn-buscar">Buscar</button>
+				</div>
+
+				<div class="col-3">
+					<label> Ingrese rut de cliente</label> 
+					<input required name="rutCliente" maxlength="12" type="text" class="form-control rutCliente">
+				</div>
+				<div class="col-2 mt-4">
+					<button class="btn btn-success btn-buscar-persona" disabled>Buscar</button>
+				</div>
+			</div>
+			<hr>
+			<div class="row">
+				<div class="col-12">
+					<h1>Listado de productos</h1>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-12">
+					<form method="POST" action="/ventas/crear" class="mt-5" id="form-boleta">
+						<div class="productos">
+							<div class="col-12 text-center">
+								<strong>No existen productos agregados</strong>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-9">&nbsp;</div>
+							<div class="col-3 mt-2">
+
+								<input type="text" class="totalFinal form-control"
+									name="totalFinal" disabled value="0" />
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-3">
+								<label for="inputState">Medio de pago</label> <select required
+									name="idMedioPago" id="idMedioPago" class="form-control">
+									<option value="">Seleccionar medio de pago</option>
+									<option th:each="medioPago : ${listMedioPago}"
+										th:value="${medioPago.idPago}"
+										th:text="${medioPago.descripcion}"></option>
+								</select>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-3">
+								<div class="pagoEfectivo" style="display: none">
+									<hr>
+									<h1>Pago</h1>
+									<div>
+										<label> Monto a pagar</label> <input name="montoPagar"
+											type="number" value="0" readonly
+											class="form-control montoPagar">
+									</div>
+									<div>
+										<label> ¿Con cuánto paga?</label> <input name="montoPago"
+											type="number" value="0" min="1" max="1000000" class="form-control montoPago">
+									</div>
+									<div>
+										<label> Vuelto</label> <input readonly value="0" name="vuelto"
+											type="number" class="form-control vuelto">
+									</div>
+								</div>
+							</div>
+
+							<div class="col-9 mt-2">&nbsp;</div>
+						</div>
+						<input value="0" name="idCliente" type="hidden" class="form-control">
+						<button disabled type="submit" id="generarBoleta" class="btn btn-success mb-3">Generar boleta</button>
+						
+					</form>
+				</div>
+				<div class="registroPersona" style="display: none">
+					<hr>
+					<h1>Registrar Persona</h1>
+					<div>
+						<label> Ingrese rut de cliente</label> <input required name="rut"
+							type="text" class="form-control rut">
+					</div>
+					
+					<div>
+						<label> Ingrese nombre del cliente</label> <input required name="nombre"
+							type="text" class="form-control nombreCliente">
+					</div>
+					
+					<div>
+						<label> Mail</label> <input required name="mail" type="text"
+							class="form-control mail">
+					</div>
+					<button type="submit" class="btn btn-success btn-guardar-persona mt-3">Guardar</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

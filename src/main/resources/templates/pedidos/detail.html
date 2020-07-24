@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8"/>
+	<title>Pedidos</title>
+	<div th:replace="/admin/panel :: assets"> 
+	</div>
+</head>
+<div th:replace="/admin/panel :: mainheader"></div>
+<body>
+<div class="container">
+	<div align="center">
+   		<h1>Detalle Pedido</h1>
+   	</div>
+   	
+   	<div>
+		<a href="/pedidos/">< Volver</a>
+		<hr>
+	</div>
+   	
+   	<div class="container">
+   	<div style="text-align:left">
+   	<tr th:each="pedido : ${pedido}">
+   	<p>
+   	Proveedor: <td th:text="${pedido.proveedor.nombre}"></td>
+   	</p>
+   	
+   	<p>
+   	Vendedor: <td th:text="${pedido.usuario.persona.nombre}"></td>
+   	</p>
+   	
+   	<p>
+   	Fecha Solicitud: <td th:text="${pedido.fechaSolicitud}"></td>
+   	</p>
+   	
+   	<p>
+   	Fecha Recibido: 
+   	<td th:if ="${pedido.fechaRecibido == null}" "${detalle.estado}">En Camino</td> 
+   	<td th:if ="${pedido.fechaRecibido != null}" "${detalle.estado}" th:text="${pedido.fechaRecibido}"></td> 
+   	</p>
+   	
+   	<p>
+   	Fecha Revisión: 
+   	<td th:if ="${pedido.fechaRecibido == null && pedido.fechaRevisado == null}" "${detalle.estado}">En Camino</td> 
+   	<td th:if ="${pedido.fechaRecibido != null && pedido.fechaRevisado == null}" "${detalle.estado}">Pendiente de revisión</td> 
+   	<td th:if ="${pedido.fechaRecibido != null && pedido.fechaRevisado != null}" "${detalle.estado}" th:text="${pedido.fechaRevisado}"></td> 
+   	</p>
+	</div>
+	
+	<div th:if="${msgEstado == 'OK'}" class="alert alert-success alert-dismissible fade show" role="alert">
+		 <span th:text="${msgRespuesta}"></span>
+		  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+		    <span aria-hidden="true">&times;</span>
+		  </button>
+	</div>
+	    <table border="1" cellpadding="10" class="table">
+	        <thead>
+	            <tr>
+	                <th>ID</th> 
+	                <th>Producto</th>
+	                <th>Cantidad Producto</th>
+	                <th>Fecha Vencimiento Lote</th>
+	                <th>Precio Unitario</th>
+	                <th>IVA</th>
+	                <th>Precio Unitario con IVA</th>
+	                <th>Precio Total</th>
+	                <!-- <th>Motivo Estado</th>-->
+	                <th>Estado</th>
+	            </tr>
+	        </thead>
+	        <tbody>
+	            <tr th:each="detalle : ${listDetallePedido}">
+	                <td th:text="${detalle.idDetalle}"></td>
+	                <td th:text="${detalle.producto.descripcion}"></td>
+	                <td th:text="${detalle.cantidadProducto}"></td>
+	                <!--  Fecha de vencimiento -->
+	                <td th:if ="${pedido.fechaRecibido == null}" th:text="${detalle.fechaVencimiento}"></td>
+	                <td th:if ="${detalle.estado == 0 || detalle.estado == 1}" th:text="${detalle.fechaVencimiento}"></td>
+	                <td th:if ="${pedido.fechaRecibido != null && pedido.fechaRevisado == null && detalle.estado == null}">
+	                	<input required name="fechaVencimiento" type="date" class="fechaVencimiento">
+	                </td>
+	                <!--  Fin Fecha de vencimiento -->
+	                <td th:text="${detalle.precioUnitario}"></td>
+	                <td th:text="${detalle.iva+'%'}"></td>
+	                <td th:text="${(detalle.precioUnitario * detalle.iva/100) + detalle.precioUnitario}"></td>
+	                <td th:text="${((detalle.precioUnitario * detalle.iva/100) + detalle.precioUnitario) * detalle.cantidadProducto }"></td>
+	                <!--  Estado -->
+	                <td th:if ="${pedido.fechaRecibido == null && pedido.fechaRevisado == null}">En Camino</td> 
+	                <td th:if ="${pedido.fechaRecibido != null && pedido.fechaRevisado == null && detalle.estado == null}"> 
+		                <a class="btn btn-success btn-aceptar" th:href="@{${'/pedidos/detalle/revisado/' + detalle.idDetalle +'/1'}}">Aceptar</a>
+		                <a class="btn btn-danger btn-rechazar" th:href="@{${'/pedidos/detalle/revisado/' + detalle.idDetalle +'/0'}}">Rechazar</a>
+	                </td> 
+	                <td th:if ="${detalle.estado == 1}">Aceptado</td>
+	                <td th:if ="${detalle.estado == 0}">Rechazado</td>
+	                <!-- Fin Estado -->
+	        </tbody>
+	    </table>
+	    
+	    <td th:if ="${revisado && pedido.estado == null}"> 
+		    <a class="btn btn-success" th:href="@{${'/pedidos/revisado/' + pedido.idPedido +'/1'}}">Aceptar</a>
+		    <a class="btn btn-danger" th:href="@{${'/pedidos/revisado/' + pedido.idPedido +'/0'}}">Rechazar</a>
+	    </td>
+	    
+	</div>
+</div>  
+</body>
+</html>

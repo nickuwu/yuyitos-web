@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8"/>
+	<title>Clientes</title>
+	<div th:replace="/admin/panel :: assets"> 
+	</div>
+</head>
+<div th:replace="/admin/panel :: mainheader"> 
+</div>
+<body>
+    <div class="container">
+	    <div align="center">
+	    <h1>Clientes</h1>
+	    </div>
+		<div class="mb-4">
+	    	<form method="GET" action="/clientes/">
+		    	<div class="row">
+		    		<div class="col-3">
+			    		<input placeholder="Rut" class="form-control rut-buscar" maxlength="" type="text" name="rut" th:value="${rut}"/>
+			    	</div>
+			    	<div class="col-3">
+			    		<select name="estado" class="form-control">
+				    		<option th:selected="${estado == -1}" value="-1">--Seleccione Estado--</option>
+				    		<option th:selected="${estado == 0}" value="0">Moroso</option>
+				    		<option th:selected="${estado == 1}" value="1">No Moroso</option>
+			    		</select>
+			    	</div>
+			    	<div class="col-2">
+			    		<input type="submit" class="btn btn-primary" value="Buscar" />
+			    	</div>
+			   	</div>
+	    	</form>
+	    </div>
+	    <table border="1" cellpadding="10" class="table table-hover">
+	        <thead>
+	            <tr>
+	                <th>ID</th>
+	                <th>Nombre</th>
+	                <th>Rut</th>
+	                <th>Mail</th>
+	                <th>Deudor</th>
+	                <th>Ventas asociadas</th>
+	            </tr>
+	        </thead>
+	        <tbody>
+	            <tr th:each="roles : ${listRoles}">
+        	        <td th:text="${roles.persona.id}"></td>
+	                <td th:if="${roles.persona.nombre == null}">Venta sin nombre asociado</td>
+	                <td th:if="${roles.persona.nombre != null}" th:text="${roles.persona.nombre}"></td>
+	                <td th:if="${roles.persona.rut == null}">Venta sin rut asociado</td>
+	                <td th:if="${roles.persona.rut != null}" th:text="${roles.persona.rut}"></td>
+	                <td th:text="${roles.persona.mail}"></td>
+	                <td th:if="${roles.persona.estado == 0}">Moroso</td>
+	                <td th:if="${roles.persona.estado == 1}">No Moroso</td>
+	                <td><a th:href="@{${'/clientes/' + roles.persona.id + '/ventas'}}">Ver Ventas</a></td>
+	            </tr>
+	        </tbody>
+	    </table>
+    </div>
+</body>
+</html>

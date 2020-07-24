@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8"/>
+	<title>Pedidos</title>
+	<div th:replace="/admin/panel :: assets"> 
+	</div>
+</head>
+<div th:replace="/admin/panel :: mainheader"> 
+</div>
+<body>
+    <div class="container">
+    <div align="center">
+    <h1>Pedidos</h1>
+    </div>
+    
+    <div th:if="${msgEstado == 'OKCREADO'}" class="alert alert-success alert-dismissible fade show" role="alert">
+		 <span th:text="${msgRespuesta}"></span>
+	  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+	    <span aria-hidden="true">&times;</span>
+	  </button>
+	</div>
+	
+	<div th:if="${msgEstado == 'OKRECIBIDO'}" class="alert alert-success alert-dismissible fade show" role="alert">
+		 <span th:text="${msgRespuesta}"></span>
+	  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+	    <span aria-hidden="true">&times;</span>
+	  </button>
+	</div>
+	
+	<div th:if="${msgEstado == 'OKREVISADO'}" class="alert alert-success alert-dismissible fade show" role="alert">
+		 <span th:text="${msgRespuesta}"></span>
+	  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+	    <span aria-hidden="true">&times;</span>
+	  </button>
+	</div>
+    
+    <div align="right" class="mb-3">
+    <a class="btn btn-primary" href="/pedidos/nuevo/">Crear Pedido</a>
+    </div>
+	    <table border="1" cellpadding="10" class="table table-hover">
+	        <thead>
+	            <tr>
+	                <th>ID</th>
+	                <th>Fecha Solicitud</th>
+	                <th>Fecha Recibido</th>
+	                <th>Fecha Revisado</th>
+	                <th>Estado</th>
+	                <th>Vendedor</th>
+	                <th>Proveedor</th>
+	                <th></th>
+	            </tr>
+	        </thead>
+	        
+	        <tbody th:if="${listPedidos.size()} == 0">
+	        	<tr>
+	        		<td colspan="9" class="text-center"> No existen registros</td>
+	        	</tr>
+	        </tbody>
+	        
+	        <tbody th:if="${listPedidos.size()} > 0">
+	            <tr th:each="pedido : ${listPedidos}">
+	                <td th:text="${pedido.idPedido}"></td>
+	                <td th:text="${pedido.fechaSolicitud}"></td>
+	                <td th:text="${pedido.fechaRecibido}"></td>
+	                <td th:text="${pedido.fechaRevisado}"></td>
+	                <td th:if ="${pedido.fechaRecibido == null && pedido.fechaRevisado == null}" >En Camino <br><a class="btn btn-primary" th:href="@{${'/pedidos/recibido/' + pedido.idPedido}}">Recibido</a></br></td>
+	                <td th:if ="${pedido.fechaRecibido != null && pedido.fechaRevisado == null}" >Pendiente de revisión</td>
+	                <td th:if ="${pedido.fechaRecibido != null && pedido.fechaRevisado != null && pedido.estado == 0}">Rechazado</td>
+	                <td th:if ="${pedido.fechaRecibido != null && pedido.fechaRevisado != null && pedido.estado == 1}">Aceptado</td>
+	                <td th:text="${pedido.usuario.persona.nombre}"></td>
+	                <td th:text="${pedido.proveedor.nombre}"></td>
+	                <td><a th:href="@{${'/pedidos/detalle/' + pedido.idPedido}}">Ver detalle</a></td>
+	            </tr>
+	        </tbody>
+	    </table>
+    </div>
+</body>
+</html>
